@@ -1,5 +1,9 @@
 const response = require('../helpers/standartResponse');
 
-exports.getAllUsers = (req, res)=>{
-    return response(res, 'Message from standart response', 404);
+const userModel = require('../models/users');
+
+exports.getAllUsers = (req, res) => {
+  userModel.getAllUsers((results) => {
+    return response(res, 'Message from standart response', results);
+  });
 };

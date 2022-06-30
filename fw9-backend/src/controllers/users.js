@@ -33,7 +33,7 @@ exports.createUser = (req, res) => {
       } else {
         return response(res, 'Create user successfully', results[0]);
       }
-      return response(res, 'Error', null, 400);
+      // return response(res, 'Error', null, 400);
     } else {
       return response(res, 'Create user successfully', results[0]);
     }

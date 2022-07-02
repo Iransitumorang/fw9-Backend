@@ -1,5 +1,4 @@
 const response = require('../helpers/standartResponse');
-
 const userModel = require('../models/users');
 
 exports.getAllUsers = (req, res) => {
@@ -11,7 +10,7 @@ exports.getAllUsers = (req, res) => {
 const {
   validationResult
 } = require('express-validator');
-const errorRespon = require('../helpers/errorResponse');
+const errorResponse = require('../helpers/errorResponse');
 
 exports.createUser = (req, res) => {
   // if(req.body.username.length < 4){
@@ -24,14 +23,7 @@ exports.createUser = (req, res) => {
 
   userModel.createUser(req.body, (err, results) => {
     if (err) {
-      if (err.code === '23505' && err.detail.includes('email')) {
-        const eres = errorRespon('Email already exists', 'email');
-        return response(res, 'Error', eres, 400);
-      } else if (err.code === '23505' && err.detail.includes('username')) {
-        const eres = errorRespon('Username already exists', 'username');
-        return response(res, 'Error', eres, 400);
-      }
-      return response(res, 'Error', null, 400);
+      return errorResponse(err, res);
     } else {
       return response(res, 'Create user successfully', results[0]);
     }
@@ -43,4 +35,11 @@ exports.editUser = (req, res) => {
     id
   } = req.params;
   return response(res, 'Data from params', id);
+};
+
+exports.deleteUser = (req, res)=>{
+  const {id} = req.params;
+  userModel.deleteUser(id, (results)=>{
+    return response(res, 'User deleted', results[0]);
+  });
 };

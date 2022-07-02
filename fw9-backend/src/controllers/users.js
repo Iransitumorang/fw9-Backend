@@ -19,7 +19,7 @@ exports.createUser = (req, res) => {
   // };
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
-    return response(res, 'Error accured', validation.array());
+    return response(res, 'Error accured', validation.array(), 400);
   }
 
   userModel.createUser(req.body, (err, results) => {
@@ -30,10 +30,8 @@ exports.createUser = (req, res) => {
       } else if (err.code === '23505' && err.detail.includes('username')) {
         const eres = errorRespon('Username already exists', 'username');
         return response(res, 'Error', eres, 400);
-      } else {
-        return response(res, 'Create user successfully', results[0]);
       }
-      // return response(res, 'Error', null, 400);
+      return response(res, 'Error', null, 400);
     } else {
       return response(res, 'Create user successfully', results[0]);
     }

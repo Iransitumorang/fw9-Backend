@@ -15,6 +15,6 @@ const createUserValidator = [
 users.get('/', userController.getAllUsers);
 users.post('/', ...createUserValidator, userController.createUser);
 users.patch('/:id', userController.editUser);
-users.delete('/id', userController.deletUser);
+// users.delete('/id', userController.deletUser);
 
 module.exports = users;

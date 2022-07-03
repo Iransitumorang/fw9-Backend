@@ -1,7 +1,6 @@
 const {body, validationResult } = require('express-validator');
 const errorResponse = require('../helpers/standartResponse');
 const response = require('../helpers/standartResponse');
-
 const transactionModel = require('../models/transactions');
 
 exports.getAllTransactions = (req, res)=>{

@@ -9,11 +9,11 @@ const errorHandling = (msg, param, location='hoby')=>[
 ];
 
 const errorResponse = (err, res) => {
-  if (err.code === '23505' && err.detail.includes('email')) {
+  if (err.code === err.code && err.detail.includes('email')) {
     const eres = errorHandling('Email already exists', 'email');
     return response(res, 'Error', eres, 400);
   }
-  if (err.code === '23505' && err.detail.includes('username')) {
+  if (err.code === err.code && err.detail.includes('username')) {
     const eres = errorHandling('Username already exists', 'username');
     return response(res, 'Error', eres, 400);
   }

@@ -1,16 +1,16 @@
 const db = require('../helpers/db');
 
 exports.getAllUsers = (cb) => {
-  db.query('SELECT * FROM users', (err, res)=>{
+  db.query('SELECT * FROM users', (err, res) => {
     cb(res.rows);
   });
 };
 
-exports.createUsers = (data, cb)=>{
+exports.createUser = (data, cb) => {
   const q = 'INSERT INTO users(email, password, username, pin) VALUES ($1, $2, $3, $4) RETURNING *';
   const val = [data.email, data.password, data.username, data.pin];
-  db.query(q, val, (err, res)=>{
-    if(res){
+  db.query(q, val, (err, res) => {
+    if (res) {
       cb(err, res.rows);
     } else {
       cb(err);
@@ -18,11 +18,18 @@ exports.createUsers = (data, cb)=>{
   });
 };
 
-exports.updateUser = (data, cb)=>{
+exports.updateUser = (data, cb) => {
   const q = 'UPDATE users SET email="$1", password="$2", username="$3", pin="$4"';
   const val = [data.email, data.password, data.username, data.pin];
-  db.query(q, val, (err, res)=>{
+  db.query(q, val, (err, res) => {
     cb(res.rows);
   });
 };
 
+exports.deleteUser = (id, cb) => {
+  const q = 'DELETE users WHERE id=$1 RETURNING *';
+  const val = [id];
+  db.query(q, val, (err, res) => {
+    cb(res.rows);
+  });
+};

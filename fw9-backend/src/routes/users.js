@@ -6,10 +6,12 @@ const {
 
 const createUserValidator = [
   body('email')
-  // .isEmpty().withMessage('Email cannot be empty'),
+  // .isEmpty().withMessage('Email cannot be empty')
     .isEmail().withMessage('Email fomat invalid'),
   body('username')
-    .isLength({min: 4}).withMessage('Username length minimal 4 character')
+    .isLength({
+      min: 4
+    }).withMessage('Username length minimal 4 character')
 ];
 
 users.get('/', userController.getAllUsers);

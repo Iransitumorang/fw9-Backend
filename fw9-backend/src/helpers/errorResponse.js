@@ -1,12 +1,10 @@
 const response = require('./standartResponse');
 
-const errorHandling = (msg, param, location='hoby')=>[
-  {
-    msg,
-    param,
-    location
-  }
-];
+const errorHandling = (msg, param, location = 'hoby') => [{
+  msg,
+  param,
+  location
+}];
 
 const errorResponse = (err, res) => {
   if (err.code === err.code && err.detail.includes('email')) {
@@ -17,7 +15,7 @@ const errorResponse = (err, res) => {
     const eres = errorHandling('Username already exists', 'username');
     return response(res, 'Error', eres, 400);
   }
-  if(err.column === 'amount' && err.message.includes('not-null')){
+  if (err.column === 'amount' && err.message.includes('not-null')) {
     const eres = errorHandling('Amount cannot be null', 'amount');
     return response(res, 'Error', eres, 400);
   }

@@ -1,6 +1,9 @@
 const response = require('../helpers/standartResponse');
 const userModel = require('../models/users');
-const {validationResult, body} = require('express-validator');
+const {
+  validationResult,
+  body
+} = require('express-validator');
 const errorResponse = require('../helpers/errorResponse');
 const bcrypt = require('bcrypt');
 
@@ -14,9 +17,13 @@ exports.createUser = [
   body('email')
     .isEmail().withMessage('Email fomat invalid'),
   body('username')
-    .isLength({min: 4}).withMessage('Username length minimal 4 character'),
+    .isLength({
+      min: 3
+    }).withMessage('Username length minimal 3 character'),
   body('password')
-    .isLength({min: 8}).withMessage('Password length minimal 8 character')
+    .isLength({
+      min: 8
+    }).withMessage('Password length minimal 8 character')
     .customSanitizer(async (val) => {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(val, salt);
@@ -43,13 +50,31 @@ exports.createUser = [
   }
 ];
 
+exports.getUserById = (req, res) => {
+  const {
+    id
+  } = req.params;
+  userModel.getUserById(id, (err, results) => {
+    if (results.rows.length > 0) {
+      return response(res, 'Deatil User', results.rows[0]);
+    } else {
+      return res.redirect('/404');
+    }
+  });
+};
+
 exports.editUser = (req, res) => {
-  const {id} = req.params;
+  const {
+    id
+  } = req.params;
   return response(res, 'Data from params', id);
 };
 
 exports.deleteUser = (req, res) => {
-  const {id} = req.params;
+  // return response(res, 'Delete Success');
+  const {
+    id
+  } = req.params;
   userModel.deleteUser(id, (results) => {
     return response(res, 'User deleted', results[0]);
   });

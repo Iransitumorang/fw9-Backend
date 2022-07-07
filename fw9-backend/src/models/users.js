@@ -27,9 +27,12 @@ exports.updateUser = (data, cb) => {
 };
 
 exports.deleteUser = (id, cb) => {
-  const q = 'DELETE users WHERE id=$1 RETURNING *';
+  const q = 'DELETE FROM users WHERE id=$1 RETURNING *';
   const val = [id];
   db.query(q, val, (err, res) => {
+    if (err) {
+      return err;
+    }
     cb(res.rows);
   });
 };

@@ -71,11 +71,14 @@ exports.editUser = (req, res) => {
 };
 
 exports.deleteUser = (req, res) => {
-  // return response(res, 'Delete Success');
   const {
     id
   } = req.params;
   userModel.deleteUser(id, (results) => {
-    return response(res, 'User deleted', results[0]);
+    if (results.length > 0) {
+      return response(res, 'Delete Users success', results[0]);
+    } else {
+      return res.redirect('/404');
+    }
   });
 };

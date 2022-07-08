@@ -1,10 +1,22 @@
 const db = require('../helpers/db');
 
-exports.getAllUsers = (cb) => {
-  db.query('SELECT * FROM users', (err, res) => {
-    cb(res.rows);
+exports.getAllUsers = (keyword, cb) => {
+  //console.log(keyword);
+  db.query(`SELECT * FROM users WHERE email LIKE '%${keyword}%' ORDER BY id ASC`, (err, res) => {
+    // console.log(res);
+    if (err) {
+      console.log(err);
+    } else {
+      cb(err, res.rows);
+    }
   });
 };
+
+exports.getUserById = (id, cb) => [
+  db.query('SELECT * FROM users WHERE id=$1', [id], (err, res) => {
+    cb(err, res);
+  })
+];
 
 exports.createUser = (data, cb) => {
   const q = 'INSERT INTO users(email, password, username, pin) VALUES ($1, $2, $3, $4) RETURNING *';

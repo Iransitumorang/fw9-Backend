@@ -8,8 +8,13 @@ const errorResponse = require('../helpers/errorResponse');
 const bcrypt = require('bcrypt');
 
 exports.getAllUsers = (req, res) => {
-  userModel.getAllUsers((results) => {
+  const {
+    search = ''
+  } = req.query;
+  userModel.getAllUsers(search, (err, results) => {
+    //console.log(results);
     return response(res, 'Message from standart response', results);
+
   });
 };
 
@@ -56,7 +61,7 @@ exports.getUserById = (req, res) => {
   } = req.params;
   userModel.getUserById(id, (err, results) => {
     if (results.rows.length > 0) {
-      return response(res, 'Deatil User', results.rows[0]);
+      return response(res, 'Detail User', results.rows[0]);
     } else {
       return res.redirect('/404');
     }

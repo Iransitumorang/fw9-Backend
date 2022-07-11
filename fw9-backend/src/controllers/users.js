@@ -7,13 +7,40 @@ const {
 const errorResponse = require('../helpers/errorResponse');
 const bcrypt = require('bcrypt');
 
+const {
+  LIMIT_DATA
+} = process.env;
+
 exports.getAllUsers = (req, res) => {
   const {
-    search = ''
+    q = '', limit = parseInt(LIMIT_DATA), page = 1
   } = req.query;
-  userModel.getAllUsers(search, (err, results) => {
-    //console.log(results);
-    return response(res, 'Message from standart response', results);
+  const offset = (page - 1) * limit;
+  userModel.getAllUsers(q, limit, offset, (err, results) => {
+    if (results.length < 1) {
+      return res.redirect('/404');
+    }
+    const pageInfo = {};
+
+    userModel.countAllUsers(q, (err, totalData) => {
+      pageInfo.totalData = totalData;
+      pageInfo.totalData = Math.ceil(totalData / limit);
+      pageInfo.currentPage = parseInt(page);
+      pageInfo.nextPage = pageInfo.currentPage < pageInfo.totalPage ? pageInfo.currentPage + 1 : null;
+      pageInfo.prevPage = pageInfo.currentPage > 1 ? pageInfo.currentPage - 1 : null;
+      return response(res, 'List all user', results, pageInfo);
+    });
+    //   console.log(err);
+    //   const pageInfo = {};
+    //   return response(res, 'List all users', results, pageInfo);
+    // });
+    // const {
+    //   search = ''
+    // } = req.query;
+    // userModel.getAllUsers(search, q, (err, results, totalData) => {
+    //   pageInfo.totalData = totalData;
+    //   // const pageInfo = {};
+    //   return response(res, 'List of all users', results, pageInfo);
 
   });
 };
@@ -42,7 +69,7 @@ exports.createUser = [
 
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
-      return response(res, 'Error accured', validation.array(), 400);
+      return response(res, 'Error accured', validation.array(), null, 400);
     }
 
     userModel.createUser(req.body, (err, results) => {

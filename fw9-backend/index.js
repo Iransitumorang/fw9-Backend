@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const authMiddleware = require('./src/middleware/auth');
 
 global.__basepath = __dirname;
 
@@ -15,6 +16,16 @@ app.get('/', (req, res) => {
   return res.json({
     success: true,
     message: 'Back End is running well'
+  });
+});
+
+app.get('/authenticaionUser', authMiddleware, (req, res) => {
+  const userModel = require('./src/models/users');
+  userModel.getUserById(req.authUser.id, (err, results) => {
+    const user = results.rows[0];
+    return res.json({
+      message: 'Hello ' + user.email
+    });
   });
 });
 
